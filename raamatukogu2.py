@@ -104,7 +104,7 @@ select_raamatud = "SELECT * from Raamatud"
 def add_zanr_query(connection, user_data):
     query = "INSERT INTO Zanrid(žanri_nimi) VALUES (?)"
     cursor = connection.cursor()
-    cursor.execute(query, user_data)
+    cursor.execute(query, (user_data,))
     connection.commit()
     print("žanr lisatud edukalt!")
 
@@ -121,6 +121,27 @@ def delete_autor_query(conn, delete_autor):
     cursor.execute(query, (delete_autor,))
     connection.commit()
     print("Autor kustutatud edukalt!")
+
+def delete_zanr_query(conn, delete_zanr):
+    query = "DELETE FROM Zanrid WHERE žanr_id = ?"
+    cursor = connection.cursor()
+    cursor.execute(query, (delete_zanr,))
+    connection.commit()
+    print("Autor kustutatud edukalt!")
+
+def add_raamat_query(connection, user_data):
+    query = "INSERT INTO Raamatud(pealkiri, väljaandmise_kuupäev, žanri_nimi, autor_nimi) VALUES (?,?,?,?)"
+    cursor = connection.cursor()
+    cursor.execute(query, user_data)
+    connection.commit()
+    print("Autor lisatud edukalt!")
+
+def delete_raamat_query(conn, delete_raamat):
+    query = "DELETE FROM Raamatud WHERE raamat_id = ?"
+    cursor = connection.cursor()
+    cursor.execute(query, (delete_raamat,))
+    connection.commit()
+    print("Raamat kustutatud edukalt!")
     
 def delete_data_from_tabelautor(connection, query):
     try:
@@ -131,8 +152,15 @@ def delete_data_from_tabelautor(connection, query):
     except Error as e:
         print(f"Viga '{e}' andmete kustutamisega")
 
+def update_autor_query(connection, user_data):
+    query = "UPDATE Autorid SET autor_nimi = ?, sünnikuupäev = ? WHERE autor_id = ?"
+    cursor = connection.cursor()
+    cursor.execute(query, user_data)
+    connection.commit()
+    print("Autor oli redigeeritud!")
+
 while True:
-    a=int (input("Че делать ? (0=покажи авторов, 1=добавь автора, 2=удали автора, 3=покажи жанры, 6=покажи книги) \n"))
+    a=int (input("Че делать ? (0=покажи авторов, 1=добавь автора, 2=удали автора, 3=покажи жанры, 4=добавь жанр, 5=удалить жанр,\n 6=покажи книги, 7=добавить книгу, 8=удалить книгу, 9=поменять автора) \n"))
     if a == 0:
         Autorid = execute_read_query(conn, select_autorid)
         for autor in Autorid:
@@ -158,11 +186,28 @@ while True:
         print(insert_zanr)
         add_zanr_query(conn,insert_zanr)
         
-    # elif a == 5:
+    elif a == 5:
+        delete_zanr = input("Id: ")
+        print(delete_zanr)
+        delete_zanr_query(conn, delete_zanr)
             
     elif a == 6:
         Raamatud = execute_read_query(conn, select_raamatud)
         for Raamat in Raamatud:
             print(Raamat)
-        
+
+    elif a == 7:
+        insert_raamat=input("raamatu nimi: "),input("väljaandmise kuupäev(year-month-day): "), input("žanri nimi: "), input("autor nimi: ")
+        print(insert_raamat)
+        add_raamat_query(conn,insert_raamat)
+    
+    elif a == 8:
+        delete_raamat = input("Id: ")
+        print(delete_raamat)
+        delete_raamat_query(conn, delete_raamat)
+
+    elif a == 9:
+        user_data = input("Uus nimi: "), input("Uus sünnikuupäev: "), input("ID: ")
+        print(user_data)
+        update_autor_query(conn, user_data)
 
