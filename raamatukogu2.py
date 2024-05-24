@@ -1,6 +1,8 @@
 ﻿from sqlite3 import * 
 from sqlite3 import Error
 import sqlite3
+import tkinter as tk
+from tkinter import ttk, messagebox
 
 connection = sqlite3.connect('my_database.db')
 
@@ -158,56 +160,104 @@ def update_autor_query(connection, user_data):
     cursor.execute(query, user_data)
     connection.commit()
     print("Autor oli redigeeritud!")
-
-while True:
-    a=int (input("Че делать ? (0=покажи авторов, 1=добавь автора, 2=удали автора, 3=покажи жанры, 4=добавь жанр, 5=удалить жанр,\n 6=покажи книги, 7=добавить книгу, 8=удалить книгу, 9=поменять автора) \n"))
-    if a == 0:
-        Autorid = execute_read_query(conn, select_autorid)
-        for autor in Autorid:
-            print(autor)
     
-    elif a == 1:
-        insert_autor=(input("Nimi: "),input("sünnikuupäev(year-month-day): "))
-        print(insert_autor)
-        add_autor_query(conn,insert_autor)
+def update_zanr_query(connection, user_data):
+    query = "UPDATE Zanrid SET žanri_nimi = ?  WHERE žanr_id = ?"
+    cursor = connection.cursor()
+    cursor.execute(query, user_data)
+    connection.commit()
+    print("Zanr oli redigeeritud!")
     
-    elif a == 2:
-        delete_autor = input("Id: ")
-        print(delete_autor)
-        delete_autor_query(conn, delete_autor)
+def update_raamat_query(connection, user_data):
+    query = "UPDATE Raamatud SET pealkiri = ?, väljaandmise_kuupäev = ?, žanri_nimi = ?, autor_nimi = ? WHERE raamat_id = ?"
+    cursor = connection.cursor()
+    cursor.execute(query, user_data)
+    connection.commit()
+    print("Raamat oli redigeeritud!")
+    
+def view_autorid():
+    Autorid = execute_read_query(conn, select_autorid)
+    for autor in Autorid:
+        print(autor)
+        tekst=autor
         
-    elif a == 3:
-        Zanrid = execute_read_query(conn, select_zanrid)
-        for Zanr in Zanrid:
-            print(Zanr)
-            
-    elif a == 4: 
-        insert_zanr=(input("zanrti nimi: "))
-        print(insert_zanr)
-        add_zanr_query(conn,insert_zanr)
+def view_raamatud():
+    Raamatud = execute_read_query(conn, select_raamatud)
+    for Raamat in Raamatud:
+        print(Raamat)
+        tekst=Raamat
         
-    elif a == 5:
-        delete_zanr = input("Id: ")
-        print(delete_zanr)
-        delete_zanr_query(conn, delete_zanr)
-            
-    elif a == 6:
-        Raamatud = execute_read_query(conn, select_raamatud)
-        for Raamat in Raamatud:
-            print(Raamat)
+def view_zanrid():
+    Zanrid = execute_read_query(conn, select_zanrid)
+    for zaanr in Zanrid:
+        print(zaanr)
+        tekst=zaanr
+        
 
-    elif a == 7:
-        insert_raamat=input("raamatu nimi: "),input("väljaandmise kuupäev(year-month-day): "), input("žanri nimi: "), input("autor nimi: ")
-        print(insert_raamat)
-        add_raamat_query(conn,insert_raamat)
+
+
+# while True:
+#     a=int (input("Че делать ? (0=покажи авторов, 1=добавь автора, 2=удали автора, 3=покажи жанры, 4=добавь жанр, 5=удалить жанр,\n 6=покажи книги, 7=добавить книгу, 8=удалить книгу, 9=поменять автора, 10=поменять жанр, 11=поменять книгу) \n"))
+#     if a == 0:
+#         Autorid = execute_read_query(conn, select_autorid)
+#         for autor in Autorid:
+#             print(autor)
     
-    elif a == 8:
-        delete_raamat = input("Id: ")
-        print(delete_raamat)
-        delete_raamat_query(conn, delete_raamat)
+#     elif a == 1:
+#         insert_autor=(input("Nimi: "),input("sünnikuupäev(year-month-day): "))
+#         print(insert_autor)
+#         add_autor_query(conn,insert_autor)
+    
+#     elif a == 2:
+#         delete_autor = input("Id: ")
+#         print(delete_autor)
+#         delete_autor_query(conn, delete_autor)
+        
+#     elif a == 3:
+#         Zanrid = execute_read_query(conn, select_zanrid)
+#         for Zanr in Zanrid:
+#             print(Zanr)
+            
+#     elif a == 4: 
+#         insert_zanr=(input("zanrti nimi: "))
+#         print(insert_zanr)
+#         add_zanr_query(conn,insert_zanr)
+        
+#     elif a == 5:
+#         delete_zanr = input("Id: ")
+#         print(delete_zanr)
+#         delete_zanr_query(conn, delete_zanr)
+            
+#     elif a == 6:
+#         Raamatud = execute_read_query(conn, select_raamatud)
+#         for Raamat in Raamatud:
+#             print(Raamat)
 
-    elif a == 9:
-        user_data = input("Uus nimi: "), input("Uus sünnikuupäev: "), input("ID: ")
-        print(user_data)
-        update_autor_query(conn, user_data)
+#     elif a == 7:
+#         insert_raamat=input("raamatu nimi: "),input("väljaandmise kuupäev(year-month-day): "), input("žanri nimi: "), input("autor nimi: ")
+#         print(insert_raamat)
+#         add_raamat_query(conn,insert_raamat)
+    
+#     elif a == 8:
+#         delete_raamat = input("Id: ")
+#         print(delete_raamat)
+#         delete_raamat_query(conn, delete_raamat)
+
+#     elif a == 9:
+#         user_data = input("Uus nimi: "), input("Uus sünnikuupäev: "), input("ID: ")
+#         print(user_data)
+#         update_autor_query(conn, user_data)
+        
+#     elif a == 10:
+#         user_data = input("Uus zanri nimi: "), input("ID: ")
+#         print(user_data)
+#         update_zanr_query(conn, user_data)
+        
+#     elif a == 11:
+#         user_data = input("Uus pealkiri nimi: "), input("Uus väljaandmise kuupäev nimi: "), input("Uus žanri nimi: "), input("Uus autor nimi: "), input("ID: ")
+#         print(user_data)
+#         update_raamat_query(conn, user_data)
+
+
+
 
