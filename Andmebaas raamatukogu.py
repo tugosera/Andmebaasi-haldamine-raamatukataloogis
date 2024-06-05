@@ -112,3 +112,24 @@ nuppAutorid = Button(raam,
 nuppAutorid.place(x=0, y=0)
 
 raam.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
